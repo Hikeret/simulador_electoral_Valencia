@@ -1,0 +1,23 @@
+'use strict';
+const INITIAL=[{name:'Partido A',votes:650000},{name:'Partido B',votes:480000},{name:'Partido C',votes:290000},{name:'Partido D',votes:160000},{name:'Partido E',votes:65000}];
+const COLORS=['#4a66e8','#e86b65','#26a69a','#f3b84d','#a274d7','#e786b8','#588ba8','#84aa66'];
+let parties=INITIAL.map(p=>({...p}));
+const $=id=>document.getElementById(id);
+const number=n=>new Intl.NumberFormat('es-ES',{maximumFractionDigits:2}).format(n);
+function validInt(v){return /^\d+$/.test(String(v).trim())&&Number.isSafeInteger(Number(v));}
+function calculate(items,seats,blank){
+ const valid=items.reduce((s,p)=>s+p.votes,blank),minimum=valid*.03;
+ const eligible=items.map((p,i)=>({...p,index:i,seats:0})).filter(p=>p.votes>0&&p.votes>=minimum);
+ const winners=[];
+ for(let s=0;s<seats&&eligible.length;s++){
+  eligible.sort((a,b)=>{const diff=b.votes/(b.seats+1)-a.votes/(a.seats+1);return Math.abs(diff)>1e-9?diff:b.votes-a.votes||a.index-b.index;});
+  const winner=eligible[0];const divisor=winner.seats+1;winners.push({index:winner.index,quotient:winner.votes/divisor});winner.seats++;
+ }
+ const allocated=items.map((p,i)=>({...p,seats:eligible.find(e=>e.index===i)?.seats||0,index:i}));
+ return {valid,minimum,winners,allocated};
+}
+function el(tag,content,className){const node=document.createElement(tag);if(content!==undefined)node.textContent=content;if(className)node.className=className;return node;}
+function renderInputs(){const body=$('parties');body.replaceChildren();parties.forEach((p,i)=>{const tr=el('tr');const name=el('input');name.type='text';name.value=p.name;name.maxLength=70;name.setAttribute('aria-label',`Nombre del partido ${i+1}`);name.addEventListener('input',()=>{parties[i].name=name.value;renderResults();});const votes=el('input');votes.type='number';votes.min='0';votes.step='1';votes.value=p.votes;votes.setAttribute('aria-label',`Votos del partido ${i+1}`);votes.addEventListener('input',()=>{parties[i].votes=votes.value;renderResults();});const remove=el('button','Eliminar','remove');remove.setAttribute('aria-label',`Eliminar partido ${i+1}`);remove.addEventListener('click',()=>{parties.splice(i,1);renderInputs();renderResults();});for(const child of [name,votes,remove]){const td=el('td');td.append(child);tr.append(td);}body.append(tr);});}
+function renderResults(){const seatsRaw=$('seats').value,blankRaw=$('blank').value;const valid=validInt(seatsRaw)&&Number(seatsRaw)>=1&&Number(seatsRaw)<=100&&validInt(blankRaw)&&parties.every(p=>validInt(p.votes));if(!valid){$('error').textContent='Introduce votos y votos en blanco enteros no negativos, y entre 1 y 100 escaños.';clearResults();return;}$('error').textContent='';const seats=Number(seatsRaw),blank=Number(blankRaw),items=parties.map(p=>({name:p.name.trim()||'Sin nombre',votes:Number(p.votes)}));const {valid:total,minimum,winners,allocated}=calculate(items,seats,blank);$('total').textContent=`${number(total)} votos válidos`;$('assigned').textContent=number(winners.length);$('represented').textContent=number(allocated.filter(p=>p.seats>0).length);$('threshold').textContent=number(Math.ceil(minimum));const bar=$('seatbar'),legend=$('legend'),breakdown=$('breakdown'),quotients=$('quotients');[bar,legend,breakdown,quotients].forEach(n=>n.replaceChildren());allocated.filter(p=>p.seats>0).sort((a,b)=>b.seats-a.seats||b.votes-a.votes).forEach(p=>{for(let j=0;j<p.seats;j++){const seat=el('span',undefined,'seat');seat.style.background=COLORS[p.index%COLORS.length];seat.title=p.name;bar.append(seat);}const item=el('span',undefined,'legend-item');const dot=el('span',undefined,'dot');dot.style.background=COLORS[p.index%COLORS.length];item.append(dot,el('span',`${p.name}: ${p.seats}`));legend.append(item);});$('empty').hidden=winners.length>0;allocated.sort((a,b)=>b.votes-a.votes).forEach(p=>{const tr=el('tr');[p.name,number(p.votes),total?`${number(p.votes/total*100)} %`:'0 %',String(p.seats)].forEach(v=>tr.append(el('td',v)));breakdown.append(tr);});winners.forEach((w,i)=>{const tr=el('tr');[String(i+1),items[w.index].name,number(w.quotient)].forEach(v=>tr.append(el('td',v)));quotients.append(tr);});}
+function clearResults(){['seatbar','legend','breakdown','quotients'].forEach(id=>$(id).replaceChildren());['assigned','represented','threshold'].forEach(id=>$(id).textContent='—');$('total').textContent='Datos inválidos';$('empty').hidden=true;}
+$('add').addEventListener('click',()=>{parties.push({name:`Partido ${parties.length+1}`,votes:0});renderInputs();renderResults();});$('reset').addEventListener('click',()=>{parties=INITIAL.map(p=>({...p}));$('seats').value=16;$('blank').value=0;renderInputs();renderResults();});['seats','blank'].forEach(id=>$(id).addEventListener('input',renderResults));renderInputs();renderResults();
