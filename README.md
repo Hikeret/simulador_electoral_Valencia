@@ -51,3 +51,11 @@ simulador-electoral-valencia/
 ├── script.js
 └── README.md
 ```
+
+## Mejoras de la beta
+
+- Color predeterminado por partido y selector circular para cambiarlo.
+- Filas teñidas suavemente según el color seleccionado, también en resultados.
+- Tabla D'Hondt horizontal: partidos en filas, divisores (1 hasta el número de escaños) en columnas.
+- Cocientes adjudicatarios resaltados. La tabla se desplaza horizontalmente en pantallas pequeñas.
+- Los nombres y votos siguen siendo editables y el reparto se recalcula al instante.
