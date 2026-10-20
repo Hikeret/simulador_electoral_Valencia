@@ -4,3 +4,37 @@
 header{background:linear-gradient(120deg,#15233d,#263c5c);color:white;padding:32px;border-radius:20px}header .eyebrow{color:#b8cbff}header p{color:#e1e9f6}header h1 em{color:#9fbcff}
 .color-picker{width:43px;height:43px;border-radius:50%;padding:3px;border:2px solid #fff;cursor:pointer;box-shadow:0 0 0 1px #cdd7e5;background:transparent;min-width:43px}.color-picker::-webkit-color-swatch-wrapper{padding:0}.color-picker::-webkit-color-swatch{border:0;border-radius:50%}.color-picker::-moz-color-swatch{border:0;border-radius:50%}
 #parties tr,#breakdown tr,#quotients tr{transition:background .2s}#parties td:first-child{width:66px}#parties td:nth-child(3) input{min-width:125px}.dot{border-radius:50%;width:14px;height:14px;vertical-align:middle;margin-right:6px}.seat{border-radius:7px}.winning{font-weight:800;box-shadow:inset 0 0 0 2px var(--winning-border,#5167ac);background:rgba(255,255,255,.7)}#quotients td,#quotients th{white-space:nowrap;text-align:right;min-width:88px}#quotients td:first-child,#quotient-head th:first-child{text-align:left;position:sticky;left:0;z-index:1;min-width:160px;background:#f8faff}#quotients td:first-child{font-weight:700}#quotients tr td:first-child{background:inherit}#quotient-head th{background:#f8faff}details .table-scroll{margin-top:20px}details[open]{border-color:#c9d5f0}
+
+/* Beta 6: decoraciones distribuidas por el documento, sin fondos fijos ni filtros costosos */
+body{background:#edf1f6;min-height:100%;position:relative;isolation:isolate}
+.valencia-backdrop{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:linear-gradient(155deg,#edf1f6,#f6f8fa 45%,#edf1f6)}
+.landmark{position:absolute;width:min(68vw,610px);height:340px;background-repeat:no-repeat;background-position:center;background-size:contain;opacity:.16;pointer-events:none}
+.landmark-one{top:80px;right:-90px;background-image:url('assets/hemiciclo.svg')}
+.landmark-two{top:540px;left:-110px;background-image:url('assets/ciudad-artes.svg')}
+.landmark-three{top:1150px;right:-110px;background-image:url('assets/valencia-silueta.svg')}
+.landmark-four{top:1790px;left:-100px;background-image:url('assets/naranjas.svg')}
+.landmark-five{top:2390px;right:-80px;background-image:url('assets/torres-serranos.svg')}
+.wrap{position:relative;z-index:1;max-width:1140px}
+.panel,.stat{background:#fff}
+#parties tr{position:relative}
+#parties tr td{background:transparent}
+#parties tr:focus-within{outline:2px solid #849dd8;outline-offset:-2px}
+@media(max-width:620px){.landmark{width:460px;height:270px;opacity:.13}.landmark-one{right:-190px}.landmark-two{left:-210px}.landmark-three{right:-200px}.landmark-four{left:-200px}.landmark-five{right:-190px}}
+@media(prefers-reduced-motion:reduce){#parties tr{transition:none!important}}
+.chart-heading{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.chart-heading h3{margin:0}
+.chart-switch{display:flex;gap:5px;padding:5px;border-radius:12px;background:#e9edf7}
+.chart-option{padding:9px 15px;font-size:14px;color:#45546d;background:transparent}
+.chart-option.active{background:#fff;color:#2948a5;box-shadow:0 2px 8px #223a6b20}
+.dynamic-chart{min-height:215px;margin:24px 0 16px}.bar-chart{display:grid;gap:13px}
+.bar-chart-row{display:grid;grid-template-columns:minmax(100px,170px) minmax(0,1fr) 55px;align-items:center;gap:13px;font-size:14px}
+.bar-chart-name{display:flex;align-items:center;gap:8px;min-width:0;overflow-wrap:anywhere;font-weight:600}
+.bar-chart-track{height:26px;background:#edf0f6;border-radius:7px;overflow:hidden}
+.bar-chart-fill{height:100%;border-radius:7px;transition:width .4s ease}
+.bar-chart-value{text-align:right;font-weight:800;font-variant-numeric:tabular-nums}
+.pie-layout{display:flex;align-items:center;justify-content:center;gap:35px;flex-wrap:wrap}
+.pie-svg{width:min(100%,300px);height:auto;filter:drop-shadow(0 6px 14px #14243d12)}
+.pie-center-number{font-size:30px;font-weight:800;fill:#1a2c48}.pie-center-label{font-size:12px;fill:#65758e}
+.pie-legend{display:grid;gap:10px;min-width:190px}.pie-legend-item{display:flex;justify-content:space-between;gap:18px;align-items:center;font-size:14px}
+.seat-caption{margin:24px 0 8px;font-size:13px;color:#6c7a90;font-weight:700}
+@media(max-width:620px){.landmark{width:170vw;height:65vh}.landmark-one{top:-5vh;right:-90vw}.landmark-two{top:30vh;left:-90vw}.landmark-three{top:68vh;right:-80vw}.bar-chart-row{grid-template-columns:minmax(70px,100px) minmax(0,1fr) 35px;gap:7px;font-size:12px}.pie-layout{gap:15px}}
+@media(prefers-reduced-motion:reduce){.bar-chart-fill{transition:none}}

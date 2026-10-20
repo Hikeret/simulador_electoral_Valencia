@@ -59,3 +59,32 @@ simulador-electoral-valencia/
 - Tabla D'Hondt horizontal: partidos en filas, divisores (1 hasta el número de escaños) en columnas.
 - Cocientes adjudicatarios resaltados. La tabla se desplaza horizontalmente en pantallas pequeñas.
 - Los nombres y votos siguen siendo editables y el reparto se recalcula al instante.
+
+
+## Tabla horizontal D'Hondt
+
+La tabla muestra cada partido en una fila y los divisores (÷1 hasta ÷N) en columnas. Las celdas de cocientes que obtienen escaño aparecen destacadas. La tabla se recalcula al modificar nombres, votos, colores, votos en blanco o escaños.
+
+Si GitHub Pages muestra la versión anterior, confirma que has sustituido los cuatro archivos en la raíz de `main`, espera al despliegue y recarga con Ctrl+F5.
+
+
+## Beta 4 — Ordenación animada y fondo valenciano
+
+- Los partidos se ordenan de mayor a menor número de votos. Tras editar los votos, se espera brevemente (550 ms) para permitir terminar de escribir y las filas se desplazan mediante animación FLIP de 570 ms. El partido conserva su identidad, nombre y color.
+- El movimiento se desactiva cuando el dispositivo solicita movimiento reducido.
+- Fondo ornamental con ilustraciones SVG de un hemiciclo vacío, una representación estilizada de la Ciutat de les Arts i les Ciències y una silueta **decorativa no cartográfica**. No es un mapa geográfico oficial.
+- Se incluyen los archivos SVG en la carpeta `assets/`: hay que subirla también a GitHub.
+
+
+## Beta 5: fondo y gráficos dinámicos
+
+- El fondo gris incorpora ilustraciones SVG decorativas a gran escala, fijadas al fondo de la ventana; no bloquean controles.
+- En **Distribución de escaños**, los botones **Barras** y **Circular** alternan entre dos gráficos accesibles, generados con JavaScript y SVG, sin dependencias externas.
+- Los gráficos se recalculan automáticamente al cambiar los votos, nombres, colores, partidos, escaños o votos en blanco.
+- El gráfico representa **escaños asignados**, no porcentaje de votos. El gráfico circular usa el total de escaños efectivamente adjudicados.
+- El proyecto funciona directamente en GitHub Pages. Sube también la carpeta `assets/`.
+
+
+## Beta 6: fondo ligero por secciones
+
+Las ilustraciones SVG (hemiciclo, Ciudad de las Artes y las Ciencias, silueta decorativa de la Comunitat Valenciana, naranjas y Torres de Serranos) aparecen a distintas alturas mientras se desplaza la página. Son dibujos estilizados, no fotografías ni cartografía exacta. Se ha eliminado el fondo fijo y los filtros de desenfoque para reducir el coste de renderizado. Los gráficos, la clasificación y los cálculos se conservan.
