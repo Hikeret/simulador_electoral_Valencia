@@ -38,3 +38,71 @@ body{background:#edf1f6;min-height:100%;position:relative;isolation:isolate}
 .seat-caption{margin:24px 0 8px;font-size:13px;color:#6c7a90;font-weight:700}
 @media(max-width:620px){.landmark{width:170vw;height:65vh}.landmark-one{top:-5vh;right:-90vw}.landmark-two{top:30vh;left:-90vw}.landmark-three{top:68vh;right:-80vw}.bar-chart-row{grid-template-columns:minmax(70px,100px) minmax(0,1fr) 35px;gap:7px;font-size:12px}.pie-layout{gap:15px}}
 @media(prefers-reduced-motion:reduce){.bar-chart-fill{transition:none}}
+
+/* Beta 7: decoraciones visibles y livianas, sin fondo fijo ni blur */
+body{background:#edf1f6;isolation:auto}
+.valencia-backdrop{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,#edf1f6 0%,#f3f5f8 45%,#edf1f6 100%)}
+.wrap{position:relative;z-index:1}
+.landmark{width:min(48vw,580px);height:350px;opacity:.48;background-size:contain;will-change:auto}
+.landmark-one{top:55px;right:-90px}
+.landmark-two{top:560px;left:-115px}
+.landmark-three{top:1180px;right:-110px}
+.landmark-four{top:1790px;left:-110px}
+.landmark-five{top:2380px;right:-90px}
+.chart-heading{display:flex;flex-direction:column;align-items:stretch;gap:17px}
+.chart-heading h3{text-align:left}
+.chart-switch{align-self:center;justify-content:center;max-width:100%;}
+.dynamic-chart{overflow:hidden;min-height:230px;contain:layout paint}
+/* Animaciones solo una vez al entrar en pantalla */
+.reveal-ready{opacity:0;transform:translateY(22px)}
+.reveal-ready.is-visible{opacity:1;transform:translateY(0);transition:opacity .58s ease,transform .58s cubic-bezier(.2,.8,.2,1)}
+@media(max-width:620px){.landmark{width:115vw;height:270px;opacity:.36}.landmark-one{top:50px;right:-62vw}.landmark-two{top:580px;left:-65vw}.landmark-three{top:1200px;right:-60vw}.landmark-four{top:1800px;left:-60vw}.landmark-five{top:2400px;right:-60vw}}
+@media(prefers-reduced-motion:reduce){.reveal-ready,.reveal-ready.is-visible{opacity:1;transform:none;transition:none}}
+
+/* BETA 8 · Escenografía valenciana a gran escala, distribuida a lo largo del documento.
+   Solo SVG vectoriales; sin background-attachment:fixed, filtros blur ni parallax JS. */
+body{background:#e8edf3}
+.valencia-backdrop{background:linear-gradient(180deg,#e5eaf0 0%,#eef1f5 22%,#e7edf2 48%,#edf0f5 72%,#e5eaf1 100%)}
+.landmark{width:min(92vw,1320px);height:680px;opacity:.55;background-size:contain;background-position:center;filter:none;transform:none}
+.landmark-one{top:-45px;right:-23vw}
+.landmark-two{top:520px;left:-25vw}
+.landmark-three{top:1280px;right:-27vw}
+.landmark-four{top:2030px;left:-26vw}
+.landmark-five{top:2750px;right:-22vw}
+/* El panel blanco permanece opaco: las ilustraciones jamás tapan el texto. */
+.panel{background:#fff;position:relative}
+.stats .stat{background:#f7f9ff}
+.dynamic-chart{overflow:hidden;min-height:230px;contain:layout paint;opacity:1}
+@media(max-width:700px){
+ .landmark{width:145vw;height:500px;opacity:.36}
+ .landmark-one{top:50px;right:-76vw}
+ .landmark-two{top:680px;left:-77vw}
+ .landmark-three{top:1420px;right:-76vw}
+ .landmark-four{top:2180px;left:-75vw}
+ .landmark-five{top:2920px;right:-75vw}
+}
+/* BETA 9: costa mediterránea a los lados, centro libre para la lectura. */
+body{background:#e8f5f4}
+.valencia-backdrop{background:
+ radial-gradient(ellipse 25% 17% at 0% 14%,#f5d4a0 0%,#f9e8c8 62%,transparent 100%),
+ radial-gradient(ellipse 25% 17% at 100% 42%,#e9c991 0%,#f7e4bf 65%,transparent 100%),
+ radial-gradient(ellipse 27% 18% at 0% 72%,#f1d3a6 0%,#f8e8cb 64%,transparent 100%),
+ linear-gradient(90deg,#74c9d2 0%,#a7e2e3 12%,#e6f5f1 27%,#f5f9f6 38%,#f5f9f6 62%,#e6f5f1 73%,#a7e2e3 88%,#74c9d2 100%)}
+.valencia-backdrop::before,.valencia-backdrop::after{content:"";position:absolute;top:0;bottom:0;width:min(22vw,300px);pointer-events:none;opacity:.5;background:repeating-radial-gradient(ellipse at 0 20%,transparent 0 38px,#fff9 40px 42px,transparent 45px 86px);background-size:100% 650px}
+.valencia-backdrop::before{left:0}.valencia-backdrop::after{right:0;transform:scaleX(-1)}
+.landmark{width:clamp(290px,36vw,610px);height:650px;opacity:.78;background-position:center;background-size:contain}
+.landmark-one{top:20px;right:calc(50% + 450px)}
+.landmark-two{top:550px;left:calc(50% + 455px)}
+.landmark-three{top:1250px;right:calc(50% + 420px);height:840px;width:clamp(340px,39vw,650px);opacity:.9}
+.landmark-four{top:2180px;left:calc(50% + 450px)}
+.landmark-five{top:2850px;right:calc(50% + 450px)}
+@media(max-width:1250px){.landmark-one,.landmark-three,.landmark-five{right:calc(100% - 160px)}.landmark-two,.landmark-four{left:calc(100% - 160px)}.landmark{opacity:.5}.landmark-three{opacity:.65}}
+@media(max-width:700px){.valencia-backdrop{background:linear-gradient(90deg,#a6dde0,#eff8f4 22%,#f7faf6 50%,#eff8f4 78%,#a6dde0)}.landmark{width:310px;height:440px;opacity:.22}.landmark-one,.landmark-three,.landmark-five{right:calc(100% - 105px)}.landmark-two,.landmark-four{left:calc(100% - 105px)}.landmark-three{width:340px;height:550px;opacity:.28}}
+
+/* Beta 10: transición reversible al entrar y salir del viewport. */
+.reveal-ready{opacity:0;transform:translate3d(0,24px,0);transition:opacity .48s ease,transform .55s cubic-bezier(.22,.8,.25,1)}
+.reveal-ready.is-visible{opacity:1;transform:translate3d(0,0,0);transition:opacity .55s ease,transform .6s cubic-bezier(.22,.8,.25,1)}
+.dhondt-details{overflow:hidden}
+.dhondt-details summary{padding:4px 0;list-style-position:inside}
+.dhondt-content{overflow:hidden}
+@media(prefers-reduced-motion:reduce){.reveal-ready,.reveal-ready.is-visible{opacity:1;transform:none;transition:none}}

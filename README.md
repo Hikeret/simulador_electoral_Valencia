@@ -88,3 +88,32 @@ Si GitHub Pages muestra la versión anterior, confirma que has sustituido los cu
 ## Beta 6: fondo ligero por secciones
 
 Las ilustraciones SVG (hemiciclo, Ciudad de las Artes y las Ciencias, silueta decorativa de la Comunitat Valenciana, naranjas y Torres de Serranos) aparecen a distintas alturas mientras se desplaza la página. Son dibujos estilizados, no fotografías ni cartografía exacta. Se ha eliminado el fondo fijo y los filtros de desenfoque para reducir el coste de renderizado. Los gráficos, la clasificación y los cálculos se conservan.
+
+
+## Beta 7
+
+- Fondo gris con cinco ilustraciones SVG distribuidas por la página (la silueta es decorativa, no cartográfica). Asegúrate de subir la carpeta `assets/` completa.
+- Selector de gráficos centrado y transición de deslizamiento al cambiar entre barras y circular.
+- Aparición progresiva de secciones al desplazarse mediante `IntersectionObserver`.
+- Compatibilidad con la preferencia de accesibilidad de movimiento reducido.
+- Los gráficos y la tabla se recalculan al editar votos, nombres y colores.
+
+
+## Beta 8 — Correcciones y fondo ampliado
+
+- Corregida la desaparición de gráficos al alternar Barras/Circular: se cancela la animación de salida antes de mostrar el nuevo contenido y se evita `fill: forwards`.
+- Fondos SVG grandes y detallados repartidos verticalmente; sin filtros pesados ni fondo fijo.
+- Se conserva la actualización automática, el selector centrado y las animaciones de entrada.
+- Publicar **también la carpeta `assets/`** y todos sus SVG en la raíz del repositorio.
+- En GitHub Pages, esperar el despliegue y refrescar con Ctrl+F5.
+
+
+## Beta 9: Costa mediterránea
+Fondo costero en CSS, con arena y agua en los bordes y contenido central legible. Ilustraciones SVG en `assets/`, incluida una silueta **artística y no cartográfica** de la Comunitat Valenciana. Subir la carpeta `assets` junto al resto de archivos.
+
+
+## Beta 10
+- Fondos sin rótulos ni texto incrustado en las ilustraciones.
+- Animación reversible de aparición/desaparición de secciones al desplazarse en ambas direcciones (IntersectionObserver).
+- Desplegable D’Hondt con transición de altura al abrir y cerrar.
+- Respeta la preferencia de accesibilidad de movimiento reducido.

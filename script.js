@@ -70,6 +70,83 @@ function renderChart(allocated,seats){
   const legend=el('div',undefined,'pie-legend');items.forEach(p=>{const item=el('div',undefined,'pie-legend-item');const name=el('span',undefined,'bar-chart-name');const dot=el('span',undefined,'dot');dot.style.background=p.color;name.append(dot,el('span',p.name));item.append(name,el('strong',`${p.seats} · ${number(100*p.seats/total)} %`));legend.append(item);});const layout=el('div',undefined,'pie-layout');layout.append(svg,legend);container.append(layout);
  }
 }
-function setChartMode(mode){chartMode=mode;for(const [id,value] of [['chart-bars','bars'],['chart-pie','pie']]){const button=$(id);button.classList.toggle('active',mode===value);button.setAttribute('aria-pressed',String(mode===value));}renderResults();}
+// El bug de la beta 7 lo provocaba fill:forwards en la animación de salida:
+// el elemento permanecía invisible incluso después de dibujar el siguiente gráfico.
+let chartTransition=null;
+let chartRequest=0;
+function setChartMode(mode){
+ if(mode!=="bars"&&mode!=="pie")return;
+ if(mode===chartMode && !chartTransition)return;
+ const chart=$('dynamic-chart');
+ const request=++chartRequest;
+ if(chartTransition){chartTransition.cancel();chartTransition=null;}
+ // Restablecer cualquier estado visual heredado antes de animar.
+ chart.style.opacity='';chart.style.transform='';
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ if(reduced||!chart.animate){applyChartMode(mode);return;}
+ const direction=mode==='pie'?-1:1;
+ const outgoing=chart.animate([
+  {opacity:1,transform:'translateX(0px)'},
+  {opacity:0,transform:`translateX(${direction*42}px)`}
+ ],{duration:210,easing:'ease-in',fill:'none'});
+ chartTransition=outgoing;
+ outgoing.finished.then(()=>{
+  if(request!==chartRequest)return;
+  outgoing.cancel(); // ¡Clave! Eliminar el efecto de la animación anterior.
+  chartTransition=null;
+  applyChartMode(mode);
+  const incoming=chart.animate([
+   {opacity:0,transform:`translateX(${-direction*42}px)`},
+   {opacity:1,transform:'translateX(0px)'}
+  ],{duration:330,easing:'cubic-bezier(.2,.8,.2,1)',fill:'none'});
+  chartTransition=incoming;
+  incoming.finished.then(()=>{
+   if(request===chartRequest){incoming.cancel();chartTransition=null;}
+  }).catch(()=>{});
+ }).catch(()=>{});
+}
+function applyChartMode(mode){
+ chartMode=mode;
+ for(const [id,value] of [['chart-bars','bars'],['chart-pie','pie']]){
+  const button=$(id);button.classList.toggle('active',mode===value);
+  button.setAttribute('aria-pressed',String(mode===value));
+ }
+ renderResults();
+}
 $('chart-bars').addEventListener('click',()=>setChartMode('bars'));
 $('chart-pie').addEventListener('click',()=>setChartMode('pie'));
+
+// Las secciones entran y salen suavemente en ambas direcciones del scroll.
+(function setupReveal(){
+ const sections=[document.querySelector('header'),document.querySelector('.controls'),document.querySelector('.results > .heading'),...document.querySelectorAll('.stats, .results > .panel')].filter(Boolean);
+ if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+ sections.forEach(section=>section.classList.add('reveal-ready'));
+ const observer=new IntersectionObserver(entries=>{
+  for(const entry of entries){entry.target.classList.toggle('is-visible',entry.isIntersecting);}
+ },{threshold:0,rootMargin:'-5% 0px -5% 0px'});
+ sections.forEach(section=>observer.observe(section));
+})();
+
+// Apertura/cierre animado de la tabla D'Hondt, sin bloquear su contenido.
+(function setupDhondtAnimation(){
+ const details=document.querySelector('.dhondt-details');
+ if(!details)return;
+ const summary=details.querySelector('summary');
+ const content=details.querySelector('.dhondt-content');
+ let animation=null;
+ summary.addEventListener('click',event=>{
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  event.preventDefault();
+  if(animation){animation.cancel();animation=null;}
+  const opening=!details.open;
+  const summaryHeight=summary.getBoundingClientRect().height;
+  const start=details.getBoundingClientRect().height;
+  if(opening)details.open=true;
+  const end=opening?summaryHeight+content.scrollHeight+52:summaryHeight+52;
+  animation=details.animate([{height:`${start}px`,opacity:1},{height:`${end}px`,opacity:1}],{
+   duration:opening?380:300,easing:'cubic-bezier(.22,.8,.25,1)'
+  });
+  animation.onfinish=()=>{if(!opening)details.open=false;animation=null;};
+  animation.oncancel=()=>{animation=null;};
+ });
+})();
